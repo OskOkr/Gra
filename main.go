@@ -16,16 +16,16 @@ func klawiatura (znak chan rune) {
 	} ()
 
 	for {
-		char, key, err := keyboard.GetKey()
+		char, _, err := keyboard.GetKey()
 		if err != nil {
 			panic(err)
 		}
 		
 		znak <- char
 		
- 		if key == keyboard.KeyEsc {
-			break
-		}
+ 		// if key == keyboard.KeyEsc {
+			// break
+		// }
 	}
 }
 
@@ -49,11 +49,44 @@ func main() {
 		}
 	}
 	
+	// jednostki := make([] [] int, 10)
+	// for i := range jednostki {
+		// jednostki [i] = make([]int, 10)
+	// }
+	
+	jednostki, err := wczytywanie.WczytajMapę("jednostki.txt")
+	if err != nil {
+		log.Fatal (err)
+	}
+	
+	for i, _ := range jednostki {
+		for j, _ := range jednostki {
+			typ := jednostki[i][j]
+			wczytywanie.RysujJednostki(i, j, typ, window)
+		}
+	}
+	
+	// fmt.Println(jednostki)
 	
 	znak := make(chan rune)
 	go klawiatura(znak)
 	
-	x := <- znak
-	fmt.Printf("%q\n", x)
-}
+	gra := true
+	
+	for gra {
+		x := <- znak
+		fmt.Printf("%q\n", x)
+		switch x { 
+		case '\x00': //ESC
+		
+		
+			return
+		case 'w', 's', 'a', 'd'://W
+			wczytywanie.PrzemiescGracza(x, &jednostki, window, swiat) 
+		}
+	}
+	
+	//(znak rune, *jednostki int[][], window *sdl.Window, swiat int[][])
 
+	
+}
