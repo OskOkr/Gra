@@ -86,25 +86,29 @@ func RysujOkno (dawajokno chan *sdl.Window) () {
 	} 
 } 
 
-func RysujPole (wysokosc int, szerokosc int, typ int, window *sdl.Window) (error) { 
-	szerokosc = szerokosc*20+(2*(szerokosc+1))
-	wysokosc = wysokosc*20+(2*(wysokosc+1))
+func Rysuj (wysokosc int, szerokosc int, jednostki [][]int, swiat [][]int, window *sdl.Window) (error) {
+	if swiat[wysokosc][szerokosc] >= 20 {
+		
+	typ_swiat := swiat[wysokosc][szerokosc]
+	szerokosc_swiat := szerokosc*20+(2*(szerokosc+1))
+	wysokosc_swiat := wysokosc*20+(2*(wysokosc+1))
 	
-	rect := sdl.Rect{int32(szerokosc), int32(wysokosc), 20, 20}
+	rect := sdl.Rect{int32(szerokosc_swiat), int32(wysokosc_swiat), 20, 20}
 	
 	var color sdl.Color
 	
-	switch typ { 
-	case 0: //WODA 
+	switch typ_swiat { 
+	case 20: //WODA 
 		color = sdl.Color{R: 0, G: 183, B: 229, A: 255} 
-	case 1://TRAWA 
+	case 21://TRAWA 
 		color = sdl.Color{R: 0, G: 204, B: 0, A: 255} 
-	case 2: //WZGORZE 
+	case 22: //WZGORZE 
 		color = sdl.Color{R: 204, G: 102, B: 0, A: 255}
 	}
 	
-
-	surface, err := window.GetSurface() 
+	var surface *sdl.Surface
+	var err error
+	surface, err = window.GetSurface() 
 	if err != nil { 
 		return err 
 	} 
@@ -114,19 +118,13 @@ func RysujPole (wysokosc int, szerokosc int, typ int, window *sdl.Window) (error
 	
 	window.UpdateSurface() 
 	
-
-	return nil
-}
-
-func RysujJednostki (wysokosc int, szerokosc int, typ int, window *sdl.Window) (error) { 
-	szerokosc = szerokosc*10+(12*(szerokosc+1))
-	wysokosc = wysokosc*10+(12*(wysokosc+1))
+	typ_jednostki := jednostki[wysokosc][szerokosc]
+	szerokosc_jednostki := szerokosc*10+(12*(szerokosc+1))
+	wysokosc_jednostki := wysokosc*10+(12*(wysokosc+1))
 	
-	rect := sdl.Rect{int32(szerokosc), int32(wysokosc), 10, 10}
+	rect = sdl.Rect{int32(szerokosc_jednostki), int32(wysokosc_jednostki), 10, 10}
 	
-	var color sdl.Color
-	
-	switch typ { 
+	switch typ_jednostki { 
 	case 0: //BRAK JEDNOSTKI
 		return nil
 	case 1://JEDNOSTKA(MAIN)
@@ -138,42 +136,43 @@ func RysujJednostki (wysokosc int, szerokosc int, typ int, window *sdl.Window) (
 	}
 	
 
-	surface, err := window.GetSurface() 
+	surface, err = window.GetSurface() 
 	if err != nil { 
 		return err 
 	} 
 
-	pixel := sdl.MapRGBA(surface.Format, color.R, color.G, color.B, color.A)
+	pixel = sdl.MapRGBA(surface.Format, color.R, color.G, color.B, color.A)
 	surface.FillRect(&rect, pixel) 
 	
 	window.UpdateSurface() 
 	
-
+	}
 	return nil
+
 }
 
 func czypuste (jednostki [][]int, i int, j int, kierunek rune) (bool) { //i, j kordynaty
 	switch kierunek {
 	case 'w':
-		if jednostki[i-1][j]==0 {
+		if jednostki[i-1][j]==0 || jednostki[i-1][j]==3 {
 			return true
 		} else {
 			return false
 		  }
 	case 's':
-		if jednostki[i+1][j]==0 {
+		if jednostki[i+1][j]==0 || jednostki[i+1][j]==3 {
 			return true
 		} else {
 			return false
 		  }
 	case 'd':
-		if jednostki[i][j+1]==0 {
+		if jednostki[i][j+1]==0 || jednostki[i][j+1]==3 {
 			return true
 		} else {
 			return false
 		  }
 	case 'a':
-		if jednostki[i][j-1]==0 {
+		if jednostki[i][j-1]==0 || jednostki[i][j-1]==3 {
 			return true
 		} else {
 			return false
@@ -194,42 +193,6 @@ func znajdzgracza (jednostki [][]int) (int, int) {
 	return -1, -1
 }
 
-// func PrzemiescGracza (znak rune, jedn *[][]int, window *sdl.Window, swiat [][]int) () {
-    // jednostki := *jedn
-	// i, j := znajdzgracza(jednostki)
-	
-    // switch znak {
-    // case 's'://S
-        // if czypuste(jednostki, i, j, znak) {
-			// jednostki[i][j]=0
-            // jednostki[i+1][j]=1
-			// RysujPole(i, j, swiat[i][j], window)
-            // RysujJednostki(i+1, j, 1, window)
-        // }
-    // case 'w': //W
-        // if czypuste(jednostki, i, j, znak) {
-			// jednostki[i][j]=0
-			// jednostki[i-1][j]=1
-			// RysujPole(i, j, swiat[i][j], window)
-			// RysujJednostki(i-1, j, 1, window)
-        // }
-    // case 'a': //A
-        // if czypuste(jednostki, i, j, znak) {
-            // jednostki[i][j]=0
-            // jednostki[i][j-1]=1
-            // RysujPole(i, j, swiat[i][j], window)
-            // RysujJednostki(i, j-1, 1, window)
-         // }
-    // case 'd': //D
-        // if czypuste(jednostki, i, j, znak) {
-            // jednostki[i][j]=0
-            // jednostki[i][j+1]=1
-            // RysujPole(i, j, swiat[i][j], window)
-            // RysujJednostki(i, j+1, 1, window)
-        // }
-    // }
-// }
-
 func PrzemiescGracza (znak rune, jedn *[][]int, window *sdl.Window, swiat [][]int) {
     jednostki := *jedn
     i, j := znajdzgracza(jednostki)
@@ -239,29 +202,46 @@ func PrzemiescGracza (znak rune, jedn *[][]int, window *sdl.Window, swiat [][]in
         if czypuste(jednostki, i, j, znak) {
             jednostki[i][j]=0
             jednostki[i+1][j]=1
-            RysujPole(i, j, swiat[i][j], window)
-            RysujJednostki(i+1, j, 1, window)
+			Rysuj(i, j, jednostki, swiat, window)
+			Rysuj(i+1, j, jednostki, swiat, window)
         }
     case 'w': //W
         if czypuste(jednostki, i, j, znak) {
             jednostki[i][j]=0
             jednostki[i-1][j]=1
-            RysujPole(i, j, swiat[i][j], window)
-            RysujJednostki(i-1, j, 1, window)
+			Rysuj(i, j, jednostki, swiat, window)
+			Rysuj(i-1, j, jednostki, swiat, window)
         }
     case 'a': //A
         if czypuste(jednostki, i, j, znak) {
             jednostki[i][j]=0
             jednostki[i][j-1]=1
-            RysujPole(i, j, swiat[i][j], window)
-            RysujJednostki(i, j-1, 1, window)
+			Rysuj(i, j, jednostki, swiat, window)
+			Rysuj(i, j-1, jednostki, swiat, window)
          }
     case 'd': //D
         if czypuste(jednostki, i, j, znak) {
             jednostki[i][j]=0
             jednostki[i][j+1]=1
-            RysujPole(i, j, swiat[i][j], window)
-            RysujJednostki(i, j+1, 1, window)
+			Rysuj(i, j, jednostki, swiat, window)
+			Rysuj(i, j+1, jednostki, swiat, window)
         }
     }
+}
+
+func wzrok (i int, j int, jednostki [][]int, swi *[][]int, window *sdl.Window) () {
+	swiat := *swi
+	if swiat[i][j] < 20 {
+		swiat[i][j]=swiat[i][j]+20
+		Rysuj(i, j, jednostki, swiat, window)
+	}
+}
+
+func Widocznosc (jednostki[][]int, swiat *[][]int, window *sdl.Window) ()  {
+	i, j := znajdzgracza(jednostki)
+	wzrok(i, j, jednostki, swiat, window)
+	wzrok(i+1, j, jednostki, swiat, window)
+	wzrok(i, j+1, jednostki, swiat, window)
+	wzrok(i-1, j, jednostki, swiat, window)
+	wzrok(i, j-1, jednostki, swiat, window)
 }
