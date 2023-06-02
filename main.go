@@ -42,12 +42,12 @@ func main() {
 	
 	window := <- dawajokno
 	
-	for i, _ := range swiat {
-		for j, _ := range swiat {
-			typ := swiat[i][j]
-			wczytywanie.RysujPole(i, j, typ, window)
-		}
-	}
+	// for i, _ := range swiat {
+		// for j, _ := range swiat {
+			// typ := swiat[i][j]
+			// wczytywanie.RysujPole(i, j, typ, window)
+		// }
+	// }
 	
 	// jednostki := make([] [] int, 10)
 	// for i := range jednostki {
@@ -61,8 +61,8 @@ func main() {
 	
 	for i, _ := range jednostki {
 		for j, _ := range jednostki {
-			typ := jednostki[i][j]
-			wczytywanie.RysujJednostki(i, j, typ, window)
+			// typ := jednostki[i][j]
+			wczytywanie.Rysuj(i, j, jednostki, swiat, window)
 		}
 	}
 	
@@ -82,7 +82,8 @@ func main() {
 		
 			return
 		case 'w', 's', 'a', 'd'://W
-			wczytywanie.PrzemiescGracza(x, &jednostki, window, swiat) 
+			wczytywanie.PrzemiescGracza(x, &jednostki, window, swiat)
+			wczytywanie.Widocznosc(jednostki, &swiat, window)
 		}
 	}
 	
