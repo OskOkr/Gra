@@ -155,13 +155,13 @@ func RysujJednostki (wysokosc int, szerokosc int, typ int, window *sdl.Window) (
 func czypuste (jednostki [][]int, i int, j int, kierunek rune) (bool) { //i, j kordynaty
 	switch kierunek {
 	case 'w':
-		if jednostki[i+1][j]==0 {
+		if jednostki[i-1][j]==0 {
 			return true
 		} else {
 			return false
 		  }
 	case 's':
-		if jednostki[i-1][j]==0 {
+		if jednostki[i+1][j]==0 {
 			return true
 		} else {
 			return false
@@ -194,24 +194,60 @@ func znajdzgracza (jednostki [][]int) (int, int) {
 	return -1, -1
 }
 
-func PrzemiescGracza (znak rune, jedn *[][]int, window *sdl.Window, swiat [][]int) () {
-    jednostki := *jedn
-	i, j := znajdzgracza(jednostki)
+// func PrzemiescGracza (znak rune, jedn *[][]int, window *sdl.Window, swiat [][]int) () {
+    // jednostki := *jedn
+	// i, j := znajdzgracza(jednostki)
 	
+    // switch znak {
+    // case 's'://S
+        // if czypuste(jednostki, i, j, znak) {
+			// jednostki[i][j]=0
+            // jednostki[i+1][j]=1
+			// RysujPole(i, j, swiat[i][j], window)
+            // RysujJednostki(i+1, j, 1, window)
+        // }
+    // case 'w': //W
+        // if czypuste(jednostki, i, j, znak) {
+			// jednostki[i][j]=0
+			// jednostki[i-1][j]=1
+			// RysujPole(i, j, swiat[i][j], window)
+			// RysujJednostki(i-1, j, 1, window)
+        // }
+    // case 'a': //A
+        // if czypuste(jednostki, i, j, znak) {
+            // jednostki[i][j]=0
+            // jednostki[i][j-1]=1
+            // RysujPole(i, j, swiat[i][j], window)
+            // RysujJednostki(i, j-1, 1, window)
+         // }
+    // case 'd': //D
+        // if czypuste(jednostki, i, j, znak) {
+            // jednostki[i][j]=0
+            // jednostki[i][j+1]=1
+            // RysujPole(i, j, swiat[i][j], window)
+            // RysujJednostki(i, j+1, 1, window)
+        // }
+    // }
+// }
+
+func PrzemiescGracza (znak rune, jedn *[][]int, window *sdl.Window, swiat [][]int) {
+    jednostki := *jedn
+    i, j := znajdzgracza(jednostki)
+
     switch znak {
     case 's'://S
         if czypuste(jednostki, i, j, znak) {
-			jednostki[i][j]=0
+            jednostki[i][j]=0
             jednostki[i+1][j]=1
-			RysujPole(i, j, swiat[i][j], window)
+            RysujPole(i, j, swiat[i][j], window)
             RysujJednostki(i+1, j, 1, window)
         }
     case 'w': //W
         if czypuste(jednostki, i, j, znak) {
-			jednostki[i][j]=0
-			jednostki[i-1][j]=1
-			RysujPole(i, j, swiat[i][j], window)
-			RysujJednostki(i-1, j, 1, window)
+            jednostki[i][j]=0
+            jednostki[i-1][j]=1
+            RysujPole(i, j, swiat[i][j], window)
+            RysujJednostki(i-1, j, 1, window)
         }
     case 'a': //A
         if czypuste(jednostki, i, j, znak) {
