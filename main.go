@@ -84,6 +84,8 @@ func main() {
 		case 'w', 's', 'a', 'd'://W
 			wczytywanie.PrzemiescGracza(x, &jednostki, window, swiat)
 			wczytywanie.Widocznosc(jednostki, &swiat, window)
+			wczytywanie.UsunSlady(&jednostki, swiat, window)
+			wczytywanie.PrzemiescWroga(&jednostki, swiat, window)
 		}
 	}
 	
