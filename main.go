@@ -23,9 +23,6 @@ func klawiatura (znak chan rune) {
 		
 		znak <- char
 		
- 		// if key == keyboard.KeyEsc {
-			// break
-		// }
 	}
 }
 
@@ -35,25 +32,12 @@ func main() {
 		log.Fatal (err)
 	}
 
-	// fmt.Println(swiat)
 	dawajokno := make(chan *sdl.Window)
 	
 	go wczytywanie.RysujOkno(dawajokno)
 	
 	window := <- dawajokno
-	
-	// for i, _ := range swiat {
-		// for j, _ := range swiat {
-			// typ := swiat[i][j]
-			// wczytywanie.RysujPole(i, j, typ, window)
-		// }
-	// }
-	
-	// jednostki := make([] [] int, 10)
-	// for i := range jednostki {
-		// jednostki [i] = make([]int, 10)
-	// }
-	
+
 	jednostki, err := wczytywanie.WczytajMapę("jednostki.txt")
 	if err != nil {
 		log.Fatal (err)
@@ -61,17 +45,14 @@ func main() {
 	
 	for i, _ := range jednostki {
 		for j, _ := range jednostki {
-			// typ := jednostki[i][j]
 			wczytywanie.Rysuj(i, j, jednostki, swiat, window)
 		}
 	}
-	
-	// fmt.Println(jednostki)
-	
 	znak := make(chan rune)
 	go klawiatura(znak)
 	
 	gra := true
+	pozostali := 0
 	
 	for gra {
 		x := <- znak
@@ -81,16 +62,22 @@ func main() {
 		
 		
 			return
+		case 'm': //odkryj mape
+			 wczytywanie.OdkryjMape(&swiat, window, jednostki)
 		case 'w', 's', 'a', 'd'://W
 			wczytywanie.PrzemiescGracza(x, &jednostki, window, swiat)
 			wczytywanie.Widocznosc(jednostki, &swiat, window)
 			wczytywanie.UsunSlady(&jednostki, swiat, window)
 			wczytywanie.PrzemiescWroga(&jednostki, swiat, window)
+			if wiezniowie := wczytywanie.IleWrogow(jednostki); wiezniowie != pozostali {
+				pozostali = wiezniowie
+				fmt.Println("W grze zostalo", pozostali,"wrogow")
+				if pozostali == 0 {
+					gra = false
+					fmt.Println("Wszyscy zbiedzy zostali zapuszkowani!")
+				}
+			}
 		}
 	}
-	
-	//(znak rune, *jednostki int[][], window *sdl.Window, swiat int[][])
-
-	
 }
 
