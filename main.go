@@ -56,7 +56,7 @@ func main() {
 	
 	for gra {
 		x := <- znak
-		fmt.Printf("%q\n", x)
+		//fmt.Printf("%q\n", x)
 		switch x { 
 		case '\x00': //ESC
 		
