@@ -218,12 +218,6 @@ func wzrok (i int, j int, jednostki [][]int, swi *[][]int, window *sdl.Window) (
 
 func Widocznosc (jednostki[][]int, swi *[][]int, window *sdl.Window) ()  {
 	i, j := znajdzgracza(jednostki)
-	// swiat := *swi
-	// wzrok(i, j, jednostki, swiat, window)
-	// wzrok(i+1, j, jednostki, swiat, window)
-	// wzrok(i, j+1, jednostki, swiat, window)
-	// wzrok(i-1, j, jednostki, swiat, window)
-	// wzrok(i, j-1, jednostki, swiat, window)
 	wzrok3(i, j, jednostki, swi, window, 2)
 }
 
@@ -261,8 +255,6 @@ func PrzemiescWroga (jedn *[][]int, swiat [][]int, window *sdl.Window) () {
 				}
 		}
 	}
-	
-			// i, j = SzukajWroga(i, j, jednostki)
 }
 
 func RuchWroga (i int, j int, jedn *[][]int, swiat [][]int, window *sdl.Window) () {
@@ -339,3 +331,24 @@ func UsunSlady (jedn *[][]int, swiat [][]int, window *sdl.Window) () {
 		}
 	}
 }
+
+func IleWrogow (jednostki [][]int) (int) {
+	pozostali := 0
+	
+	for i, _ := range jednostki {
+		for j, _ := range jednostki {
+			if jednostki[i][j]==3 {
+				pozostali++
+			}
+		}
+	}
+	return pozostali
+}
+
+ func OdkryjMape (swi *[][]int, window *sdl.Window, jednostki [][]int) {
+	 for i, _ := range jednostki {
+		 for j, _ := range jednostki {
+			 wzrok(i, j, jednostki, swi, window)
+		 }
+	 }
+ }
